@@ -1,0 +1,63 @@
+#This SOFTWARE/HOW TO is distributed is provide "AS IS" in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+#without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#
+#Dragos Iosub, Bucharest 2017.
+#http://itbrainpower.net
+
+Bellow are the patches [and configuration steps required for itbp modems usage] applied to the "2017-01-11-rasp-strech-lite-configured-itbp-modems.zip" image, 
+starting from the original Strech Lite image [downloaded from the https://www.raspberrypi.org/downloads/ at 2017-11-30].
+
+1. Additional packages installed:
+sudo apt-get update
+sudo apt-get install ppp
+sudo apt-get install python-serial
+sudo apt-get install mc
+sudo apt-get install mtr	[optional]
+
+2. Enable sshd + disable serial console & enable serial. Made via:
+sudo raspi-config
+    menu 5 / P2 for sshd
+    menu 5 / P6 for disable serial console & enable serial
+ 
+
+3. Edit /etc/rc.local, add following lines, before "# Print the IP address" line [Optional]:
+sleep 10
+/sbin/ifconfig eth0:0 192.168.122.200 up > /dev/null# supplementary static IP address 
+
+4. Edit /boot/config.txt
+Check for:
+enable_uart=1 
+And add following 3 lines[1'st. disable BLE on /dev/ttyAMA0; 2'th. enable BLE on SERIAL1; 3'th fix proper frequency to be used in conjuction with SERIAL1]:
+dtoverlay=pi3-disable-bt
+dtoverlay=pi3-miniuart-bt
+core_freq=250
+
+5. Reboot
+
+6. Disable serial getty via following two commands: 
+sudo systemctl stop serial-getty@ttyAMA0.service
+sudo systemctl disable serial-getty@ttyAMA0.service
+
+7. Patch the hciuart service. 
+variant a. 
+    Edit the /lib/systemd/system/hciuart.service, SERVICE section, like bellow [comment the original "ExecStart" line, add the second one]:
+	#ExecStart=/usr/bin/btuart
+	ExecStart=/usr/bin/hciattach /dev/serial1 bcm43xx 115200 noflow -
+
+variant b.[better] 
+    Edit /usr/bin/btuart
+    Identify the line "$HCIATTACH /dev/serial1 bcm43xx 460800 noflow - $BDADDR" comment it and add bellow
+        $HCIATTACH /dev/serial1 bcm43xx 115200 noflow - $BDADDR
+
+
+8. Set root password [optional] 
+sudo passwd root
+     we set as root passord: 1234
+
+9. Enable root remote login via ssh  [optional]
+Edit /etc/ssh/sshd_config [Authentication section]. Comment first line, add the second one
+#PermitRootLogin without-password
+PermitRootLogin yes
+
+
+Enjoy!

@@ -1,0 +1,5 @@
+First, you must prepare the RPI3 hardware. Read:
+- https://itbrainpower.net/a-gsm/RASPBIAN-JESSIE-RASPBERRY-PI-3-GSM-3G-SERIAL-HOW-TO
+- https://itbrainpower.net/a-gsm/NOOBS-RASPBERRY-PI-3-GSM-3G-SERIAL-HOW-TO
+
+Enjoy!

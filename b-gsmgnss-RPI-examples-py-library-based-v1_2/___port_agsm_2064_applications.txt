@@ -1,0 +1,9 @@
+The a-gsmII 2.105 and b-gsmgnss 2.105 shields belongs to the next generation of the a-gsm v2.064 shield.
+
+Main differences bw. a-gsm 2.064 and a-gsmII 2.105 / b-gsmgnss 2.105 are treatead in agsm2_bgsmgnss_105_hw_control.py.
+
+Take a look at following function definitions:
+- hwControlSetup()
+- resetModem()
+- poweroff()
+- poweron()

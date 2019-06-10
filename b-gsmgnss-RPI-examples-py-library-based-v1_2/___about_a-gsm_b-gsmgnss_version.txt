@@ -1,0 +1,9 @@
+Hi Folks.
+
+Thank you for purchasing the a-gsmII v2.105 / b-gsmgnss v2.105 shield! Both shields belongs to the next generation of 
+the a-gsm v2.064 shield. This code was derived [mainly hardware updates] from the a-gsm 2.064 python support code 
+[version 1.02/2016.06.15], and is valid for [can be used with] for both a-gsmII v2.105 / b-gsmgnss v2.105 shields. 
+
+The GNSS [GPS + GLONASS] library support was added [only for the b-gsmgnss v2.105 shield].
+
+Enjoy! 
