@@ -1,6 +1,7 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 import RPi.GPIO as GPIO
 import time
+from datetime import datetime
 
 # Import database
 import mysql.connector as mariadb
@@ -40,7 +41,21 @@ try:
 
 		pulse_duration = pulse_end_time - pulse_start_time
 		distance = round(pulse_duration * 17150, 2)
-		print("Distance:",distance,"cm")
+		localtime = time.localtime()
+		czas = time.strftime('%Y-%m-%d %H:%M:%S')
+		#print ("Czas pomiaru: " + czas) 
+		#data = datetime.isoformat(timespec='seconds')
+		#data = str(datetime.now().strftime("%Y-%m-%d %H:%M:%S").encode("utf-8"))
+		#data = data.isoformat(sep='T', timespec='auto')
+		year = time.strftime('%Y')
+		month = time.strftime('%m')
+		day = time.strftime('%d')
+		hour = time.strftime('%H')
+		minute = time.strftime('%M')
+		second = time.strftime('%S')
+		print("Data: " + czas)
+		
+		print("Distance: " + str(distance) + "cm")
 		if number == 1:
 			print "Mean: ",distance,"\n"
 			mean = distance
@@ -50,8 +65,10 @@ try:
 			print "Mean: ",mean,"\n"
 			number = number + 1
 		# TODO: Push mean to db
+		#print type(data)
+		
 		f.write("Distance: %d\r\n" % distance)
-		cursor.execute("INSERT INTO sensor_1 (distance) VALUES (%s)" % distance)
+		cursor.execute("INSERT INTO Encoder_abs (abs,year,month,day,hour,minute,second) VALUES (%s, %s, %s, %s, %s, %s, %s)" % (distance,year,month,day,hour,minute,second))
 		mariadb_connection.commit()
 		GPIO.cleanup()
 		
